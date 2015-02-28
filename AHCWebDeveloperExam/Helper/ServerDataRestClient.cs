@@ -20,9 +20,6 @@ namespace AHCWebDeveloperExam.Helper
 
         public IEnumerable<OrderSummaryModel> GetAll(string theType)
         {
-            if (theType == null || theType.Length == 0)
-                throw new Exception("Data type is null!");
-
             OrderType theTypeEnum = (OrderType)Enum.Parse(typeof(OrderType), theType, true);
 
             string restReqStr = "api/OrderSummary/";

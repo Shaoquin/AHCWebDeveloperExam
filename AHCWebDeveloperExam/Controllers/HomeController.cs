@@ -19,6 +19,9 @@ namespace AHCWebDeveloperExam.Controllers
 
         public ActionResult Orders(string id)
         {
+            if (id == null || id.Length == 0)
+                return null;
+
             return View(RestClient.GetAll(id));
         }
     }
