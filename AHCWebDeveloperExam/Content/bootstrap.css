@@ -6813,4 +6813,26 @@ td.visible-print {
   td.hidden-print {
     display: none !important;
   }
+
+.webgrid-header
+{
+    background-color: #A7C942;
+    color: #FFFFFF;
+    padding-bottom: 4px;
+    padding-top: 5px;
+    text-align: left;
+}
+.webgrid-footer
+{
+}
+.webgrid-row-style
+{
+    padding: 3px 7px 2px;
+}
+.webgrid-alternating-row
+{
+    background-color: #EAF2D3;
+    padding: 3px 7px 2px;
+}
+
 }

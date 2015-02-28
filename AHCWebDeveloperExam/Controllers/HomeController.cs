@@ -1,4 +1,6 @@
-﻿using System;
+﻿using AHCWebDeveloperExam.Helper;
+using RestSharp;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -8,23 +10,16 @@ namespace AHCWebDeveloperExam.Controllers
 {
     public class HomeController : Controller
     {
+        static readonly IServerDataRestClient RestClient = new ServerDataRestClient();
+
         public ActionResult Index()
         {
             return View();
         }
 
-        public ActionResult About()
+        public ActionResult Orders(string id)
         {
-            ViewBag.Message = "Your application description page.";
-
-            return View();
-        }
-
-        public ActionResult Contact()
-        {
-            ViewBag.Message = "Your contact page.";
-
-            return View();
+            return View(RestClient.GetAll(id));
         }
     }
 }

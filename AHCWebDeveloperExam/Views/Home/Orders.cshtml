@@ -1,0 +1,91 @@
+﻿@model IEnumerable<AHCWebDeveloperExam.Models.OrderSummaryModel>
+
+@{
+    ViewBag.Title = "Order Summary Data";
+}
+
+<h4 class="text-center">Graph Data</h4>
+<script src="~/Scripts/Chart.js"></script>
+<script src="~/Scripts/jquery-1.10.2.js"></script>
+
+<div class="graph-data">
+    <canvas id="orderSummaryChart" width="960" height="400"></canvas>
+</div>
+<br />
+
+
+<script type="text/javascript">
+    var periodLabels = [], totalOrderedData = [], totalShippedData = [];
+    @foreach (var item in Model)
+    {
+        @:periodLabels.push("@item.PeriodLabel");
+        @:totalOrderedData.push(@item.TotalOrderedAmount);
+        @:totalShippedData.push(@item.TotalShippedAmount);
+    }
+
+    var data = {
+        labels: periodLabels,
+        datasets: [
+            {
+                label: "Total Ordered",
+                fillColor: "rgba(220,220,220,0.5)",
+                strokeColor: "rgba(220,220,220,0.8)",
+                highlightFill: "rgba(220,220,220,0.75)",
+                highlightStroke: "rgba(220,220,220,1)",
+                data: totalOrderedData
+            },
+            {
+                label: "Total Shipped",
+                fillColor: "rgba(151,187,205,0.5)",
+                strokeColor: "rgba(151,187,205,0.8)",
+                highlightFill: "rgba(151,187,205,0.75)",
+                highlightStroke: "rgba(151,187,205,1)",
+                data: totalShippedData
+            }
+        ]
+    };
+
+    var graph = $("#orderSummaryChart").get(0);
+    graph.width = window.innerWidth > 960 ? 960 : window.innerWidth;
+
+    var ctx = graph.getContext("2d");
+    var myChart = new Chart(ctx).Bar(data, null);
+</script>
+
+<h4 class="text-center">Aggregate Data</h4>
+<div class="row">    
+    <div class="col-md-3 table-bordered text-center">
+        <strong>@Model.Sum(item => item.TotalOrderedAmount).ToString("c")</strong>
+        <p>Total Ordered Amount</p>
+    </div>
+    <div class="col-md-3 table-bordered text-center">
+        <strong>@Model.Average(item => item.TotalOrderedAmount).ToString("c")</strong>
+        <p>Average Ordered Amount</p>
+    </div>
+    <div class="col-md-3 table-bordered text-center">
+        <strong>@Model.Sum(item => item.TotalShippedAmount).ToString("c")</strong>
+        <p>Total Shipped Amount</p>
+    </div>
+    <div class="col-md-3 table-bordered text-center">
+        <strong>@Model.Average(item => item.TotalShippedAmount).ToString("c")</strong>
+        <p>Average Shipped Amount</p>
+    </div>
+</div>
+<br />
+
+<h4 class="text-center">Table Data</h4>
+<div class="table-bordered">
+@{
+    var grid = new WebGrid(Model, canPage: false, defaultSort:"Id");
+}
+@grid.GetHtml(
+    headerStyle: "text-center",
+    columns: grid.Columns(
+    grid.Column("PeriodLabel", "Period", style: "col-md-1"),
+    grid.Column("Ordered", style: "col-md-1"),
+    grid.Column("Shipped", style: "col-md-1"),
+    grid.Column("Remainder", style: "col-md-1"),
+    grid.Column("TotalOrderedAmount", "Total Ordered Amount", style: "col-md-2", format: @<text>@item.TotalOrderedAmount.ToString("c")</text>),
+    grid.Column("TotalShippedAmount", "Total Shipped Amount", style: "col-md-2", format: @<text>@item.TotalShippedAmount.ToString("c")</text>)
+    ))
+</div>
